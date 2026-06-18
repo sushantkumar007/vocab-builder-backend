@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id                       Int         @id @default(autoincrement())
+  name                     String
+  username                 String      @unique
+  email                    String      @unique
+  password                 String
+  role                     Role        @default(USER)
+  isEmailVerified          Boolean     @default(false)
+  emailVerificationToken   String?     @unique
+  emailVerificationExpires DateTime?
+  resetPasswordToken       String?     @unique
+  resetPasswordExpires     DateTime?
+  createdAt                DateTime    @default(now())
+  updatedAt                DateTime    @updatedAt
+  watchlists               Watchlist[]
+  savedWords               SavedWord[]
+}
+
+model Word {
+  id            Int            @id @default(autoincrement())
+  word          String
+  partOfSpeech  String?
+  definition    String[]
+  examples      String[]
+  synonyms      String[]
+  antonyms      String[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  watchlists    Watchlist[]
+  savedWords    SavedWord[]
+  categoryWords CategoryWord[]
+}
+
+model Watchlist {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  word      Word     @relation(fields: [wordId], references: [id])
+  wordId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, wordId])
+}
+
+model SavedWord {
+  id             Int       @id @default(autoincrement())
+  user           User      @relation(fields: [userId], references: [id])
+  userId         Int
+  word           Word      @relation(fields: [wordId], references: [id])
+  wordId         Int
+  lastReviewedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, wordId])
+}
+
+model Category {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  description   String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  categoryWords CategoryWord[]
+}
+
+model CategoryWord {
+  id         Int      @id @default(autoincrement())
+  word       Word     @relation(fields: [wordId], references: [id])
+  wordId     Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([categoryId, wordId])
+}

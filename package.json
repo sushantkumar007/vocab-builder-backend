@@ -11,6 +11,7 @@
     "start": "node src/index.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "format:prisma": "npx prisma format",
     "lint": "eslint . --max-warnings=0",
     "prepare": "husky"
   },
@@ -21,6 +22,9 @@
     ],
     "*.{yaml,yml}": [
       "prettier --write"
+    ],
+    "*.prisma": [
+      "npx prisma format"
     ]
   },
   "devDependencies": {
@@ -31,9 +35,14 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "nodemon": "^3.1.14",
-    "prettier": "^3.8.4"
+    "prettier": "^3.8.4",
+    "prisma": "^7.8.0"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.21.0"
   }
 }
