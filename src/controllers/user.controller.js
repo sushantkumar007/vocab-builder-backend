@@ -138,8 +138,6 @@ export const login = asyncHandler(async (req, res) => {
     where: { email },
   });
 
-  console.log("User found:", user); // Debugging line
-
   if (!user) {
     throw new ApiError(400, "Invalid email or password");
   }
@@ -159,9 +157,6 @@ export const login = asyncHandler(async (req, res) => {
     email: user.email,
     role: user.role,
   });
-
-  console.log("Access Token", accessToken);
-  console.log("Refresh Token", refreshToken);
 
   await prisma.user.update({
     where: { id: user.id },

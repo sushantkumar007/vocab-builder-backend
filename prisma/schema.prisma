@@ -18,7 +18,7 @@ enum Role {
 }
 
 model User {
-  id                       Int         @id @default(autoincrement())
+  id                       String      @id @default(uuid())
   name                     String
   username                 String      @unique
   email                    String      @unique
@@ -37,13 +37,15 @@ model User {
 }
 
 model Word {
-  id            Int            @id @default(autoincrement())
+  id            String         @id @default(uuid())
   word          String
+  audio         String?
   partOfSpeech  String?
-  definition    String[]
+  definition    String
   examples      String[]
   synonyms      String[]
   antonyms      String[]
+  translations  Json?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   watchlists    Watchlist[]
@@ -52,11 +54,11 @@ model Word {
 }
 
 model Watchlist {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   word      Word     @relation(fields: [wordId], references: [id])
-  wordId    Int
+  wordId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -64,11 +66,11 @@ model Watchlist {
 }
 
 model SavedWord {
-  id             Int       @id @default(autoincrement())
+  id             String    @id @default(uuid())
   user           User      @relation(fields: [userId], references: [id])
-  userId         Int
+  userId         String
   word           Word      @relation(fields: [wordId], references: [id])
-  wordId         Int
+  wordId         String
   lastReviewedAt DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -77,7 +79,7 @@ model SavedWord {
 }
 
 model Category {
-  id            Int            @id @default(autoincrement())
+  id            String         @id @default(uuid())
   name          String         @unique
   description   String?
   createdAt     DateTime       @default(now())
@@ -86,11 +88,11 @@ model Category {
 }
 
 model CategoryWord {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   word       Word     @relation(fields: [wordId], references: [id])
-  wordId     Int
+  wordId     String
   category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
+  categoryId String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

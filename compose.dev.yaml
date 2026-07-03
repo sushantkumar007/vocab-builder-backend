@@ -1,4 +1,4 @@
-name: vocab-builder-backend
+name: vocab-builder
 
 services:
   db:
@@ -15,7 +15,7 @@ services:
       - backend-network
 
   adminer:
-    image: adminer
+    image: adminer:5.4.2
     restart: always
     ports:
       - "8080:8080"
@@ -30,7 +30,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - "5000:5000"
+      - "3000:3000"
     depends_on:
       - db
     volumes:
@@ -39,8 +39,25 @@ services:
     networks:
       - backend-network
 
+  libretranslate:
+    image: libretranslate/libretranslate:v1.9.6
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    volumes:
+      - libretranslate_models:/home/libretranslate/.local:rw
+    networks:
+      - backend-network
+    healthcheck:
+      test: ["CMD-SHELL", "./venv/bin/python scripts/healthcheck.py"]
+      interval: 10s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+
 volumes:
   db_data:
+  libretranslate_models:
 
 networks:
   backend-network:
