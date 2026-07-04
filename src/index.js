@@ -13,11 +13,13 @@ app.use(cookieParser());
 import healthCheckRouter from "./routes/healthcheck.route.js";
 import userRouter from "./routes/user.route.js";
 import wordRouter from "./routes/word.route.js";
+import watchlistRouter from "./routes/watchlist.route.js";
 
 // use routes
 app.use("/api/v1/health", healthCheckRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/words", wordRouter);
+app.use("/api/v1/watchlist", watchlistRouter);
 
 // error handler middleware
 app.use(errorHandler);
