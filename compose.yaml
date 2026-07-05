@@ -117,22 +117,40 @@ networks:
 
 secrets:
   postgres-db:
+    external: true
   postgres-user:
+    external: true
   postgres-password:
+    external: true
   port:
+    external: true
   base-url:
+    external: true
   client-url:
+    external: true
   database-url:
+    external: true
   access-token-secret:
+    external: true
   access-token-expiration:
+    external: true
   refresh-token-secret:
+    external: true
   refresh-token-expiration:
+    external: true
   smtp-host:
+    external: true
   smtp-port:
+    external: true
   smtp-user:
+    external: true
   smtp-pass:
+    external: true
   smtp-from:
+    external: true
   dictionary-api-url:
+    external: true
   translate-api-url:
+    external: true
 volumes:
   db_data:
