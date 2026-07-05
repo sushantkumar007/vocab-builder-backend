@@ -1,6 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 import { errorHandler } from "./middlewares/error.middleware.js";
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;

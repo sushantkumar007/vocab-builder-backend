@@ -1,9 +1,11 @@
+import { env } from "../config/env.js";
+
 export const translateWordFromEnglish = async ({
   word = "rose",
   targetLanguage = LANGUAGE.HINDI,
 }) => {
   try {
-    const translateApiUrl = process.env.TRANSLATE_API_URL;
+    const translateApiUrl = env.TRANSLATE_API_URL;
 
     const res = await fetch(translateApiUrl, {
       method: "POST",
