@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../db/index.js";
 import { ApiError } from "../utils/ApiError.js";
 import { generateAccessRefreshToken } from "../utils/generateAccessRefreshToken.js";
+import { env } from "../config/env.js";
 
 export const isAuthenticated = async (req, res, next) => {
   const { accessToken, refreshToken } = req.cookies;
@@ -9,7 +10,7 @@ export const isAuthenticated = async (req, res, next) => {
 
   if (accessToken) {
     try {
-      const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+      const decoded = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET);
       const user = await prisma.user.findUnique({
         where: {
           id: decoded.id,
@@ -27,7 +28,7 @@ export const isAuthenticated = async (req, res, next) => {
 
   if (refreshToken) {
     try {
-      const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET);
       const user = await prisma.user.findUnique({
         where: {
           id: decoded.id,

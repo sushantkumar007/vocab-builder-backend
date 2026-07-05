@@ -1,0 +1,138 @@
+name: vocab builder
+
+services:
+  db:
+    image: postgres
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: stop-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+      restart_policy:
+        condition: any
+    volumes:
+      - db_data:/var/lib/postgresql
+      - type: tmpfs
+        target: /dev/shm
+        tmpfs:
+          size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      - POSTGRES_DB_FILE=/run/secrets/postgres-db
+      - POSTGRES_USER_FILE=/run/secrets/postgres-user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-password
+    secrets:
+      - postgres-db
+      - postgres-user
+      - postgres-password
+    networks:
+      - backend_network
+
+  adminer:
+    image: adminer:5.4.2
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: start-first
+    ports:
+      - "8080:8080"
+    networks:
+      - backend_network
+
+  backend-server:
+    image: sushantkumar007/vocab-builder-backend:latest
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: start-first
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT_FILE=/run/secrets/port
+      - BASE_URL_FILE=/run/secrets/base-url
+      - CLIENT_URL_FILE=/run/secrets/client-url
+      - DATABASE_URL_FILE=/run/secrets/database-url
+      - ACCESS_TOKEN_SECRET_FILE=/run/secrets/access-token-secret
+      - ACCESS_TOKEN_EXPIRATION_FILE=/run/secrets/access-token-expiration
+      - REFRESH_TOKEN_SECRET_FILE=/run/secrets/refresh-token-secret
+      - REFRESH_TOKEN_EXPIRATION_FILE=/run/secrets/refresh-token-expiration
+      - SMTP_HOST_FILE=/run/secrets/smtp-host
+      - SMTP_PORT_FILE=/run/secrets/smtp-port
+      - SMTP_USER_FILE=/run/secrets/smtp-user
+      - SMTP_PASS_FILE=/run/secrets/smtp-pass
+      - SMTP_FROM_FILE=/run/secrets/smtp-from
+      - DICTIONARY_API_URL_FILE=/run/secrets/dictionary-api-url
+      - TRANSLATE_API_URL_FILE=/run/secrets/translate-api-url
+    secrets:
+      - port
+      - base-url
+      - client-url
+      - database-url
+      - access-token-secret
+      - access-token-expiration
+      - refresh-token-secret
+      - refresh-token-expiration
+      - smtp-host
+      - smtp-port
+      - smtp-user
+      - smtp-pass
+      - smtp-from
+      - dictionary-api-url
+      - translate-api-url
+    networks:
+      - backend_network
+
+  libretranslate:
+    image: libretranslate/libretranslate:v1.9.6
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    volumes:
+      - libretranslate_models:/home/libretranslate/.local:rw
+    networks:
+      - backend_network
+    healthcheck:
+      test: ["CMD-SHELL", "./venv/bin/python scripts/healthcheck.py"]
+      interval: 10s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+
+networks:
+  backend_network:
+
+secrets:
+  postgres-db:
+  postgres-user:
+  postgres-password:
+  port:
+  base-url:
+  client-url:
+  database-url:
+  access-token-secret:
+  access-token-expiration:
+  refresh-token-secret:
+  refresh-token-expiration:
+  smtp-host:
+  smtp-port:
+  smtp-user:
+  smtp-pass:
+  smtp-from:
+  dictionary-api-url:
+  translate-api-url:
+volumes:
+  db_data:

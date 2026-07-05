@@ -1,11 +1,12 @@
+import Crypto from "crypto";
+import bcrypt from "bcryptjs";
 import { prisma } from "../db/index.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiRespones.js";
 import { generateAccessRefreshToken } from "../utils/generateAccessRefreshToken.js";
 import { sendEmail, emailVerificationTemplate, resetPasswordTemplate } from "../utils/email.js";
-import Crypto from "crypto";
-import bcrypt from "bcryptjs";
+import { env } from "../config/env.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -75,7 +76,7 @@ export const register = asyncHandler(async (req, res) => {
 
   const emailVerificationToken = Crypto.randomBytes(32).toString("hex");
   const emailVerificationExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const emailVerificationLink = `${process.env.CLIENT_URL}/api/v1/users/verify-email/${emailVerificationToken}`;
+  const emailVerificationLink = `${env.CLIENT_URL}/verify-email/${emailVerificationToken}`;
 
   await prisma.user.update({
     where: { id: user.id },
@@ -225,7 +226,7 @@ export const resendVerificationEmail = asyncHandler(async (req, res) => {
 
   const emailVerificationToken = Crypto.randomBytes(32).toString("hex");
   const emailVerificationExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const emailVerificationLink = `${process.env.CLIENT_URL}/api/v1/users/verify-email/${emailVerificationToken}`;
+  const emailVerificationLink = `${env.CLIENT_URL}/verify-email/${emailVerificationToken}`;
 
   const { emailText, emailHtml } = emailVerificationTemplate(user.name, emailVerificationLink);
 
@@ -260,7 +261,7 @@ export const resetPasswordRequest = asyncHandler(async (req, res) => {
 
   const resetPasswordToken = Crypto.randomBytes(32).toString("hex");
   const resetPasswordExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const resetPasswordLink = `${process.env.CLIENT_URL}/api/v1/users/reset-password/${resetPasswordToken}`;
+  const resetPasswordLink = `${env.CLIENT_URL}/reset-password/${resetPasswordToken}`;
 
   await prisma.user.update({
     where: { id: user.id },

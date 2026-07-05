@@ -1,11 +1,10 @@
+import { env } from "../config/env.js";
+
 export const getWordData = async (searchWord) => {
   try {
-    const response = await fetch(
-      `${process.env.DICTIONARY_API_URL}${encodeURIComponent(searchWord)}`,
-      {
-        method: "GET",
-      },
-    );
+    const response = await fetch(`${env.DICTIONARY_API_URL}${encodeURIComponent(searchWord)}`, {
+      method: "GET",
+    });
 
     if (!response.ok) {
       throw new Error(`Unable to find "${searchWord}". Please check the spelling and try again.`);
