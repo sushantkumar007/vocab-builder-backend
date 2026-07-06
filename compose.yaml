@@ -1,5 +1,3 @@
-name: vocab builder
-
 services:
   db:
     image: postgres
@@ -49,7 +47,7 @@ services:
       - backend_network
 
   backend-server:
-    image: sushantkumar007/vocab-builder-backend:latest
+    image: sushantkumar007/vocab-builder-backend:${IMAGE_TAG}
     deploy:
       replicas: 1
       update_config:
@@ -100,7 +98,15 @@ services:
     image: libretranslate/libretranslate:v1.9.6
     ports:
       - "5000:5000"
-    restart: unless-stopped
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: start-first
     volumes:
       - libretranslate_models:/home/libretranslate/.local:rw
     networks:
@@ -154,3 +160,4 @@ secrets:
     external: true
 volumes:
   db_data:
+  libretranslate_models:
