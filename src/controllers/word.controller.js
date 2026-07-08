@@ -38,8 +38,6 @@ export const getWords = asyncHandler(async (req, res) => {
     },
   });
 
-  console.log("Fetched words from database:", words);
-
   if (!words || words.length === 0) {
     const wordData = await getWordData(word);
 
