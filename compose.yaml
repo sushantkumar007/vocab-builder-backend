@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres
+    image: postgres:18-bookworm
     deploy:
       replicas: 1
       update_config:

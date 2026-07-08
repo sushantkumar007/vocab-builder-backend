@@ -1,15 +1,29 @@
-FROM node:22-alpine
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
-
-RUN npm ci --omit=dev --ignore-scripts
+RUN npm ci
 
 COPY . .
 
+RUN npx prisma generate
+
+FROM node:22-alpine AS production
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/generated ./generated
+COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
+
+RUN chmod +x ./entrypoint.sh
 ENV NODE_ENV=production
 
-EXPOSE 5000
+EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+ENTRYPOINT ["./entrypoint.sh"]

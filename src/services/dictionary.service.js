@@ -9,7 +9,9 @@ export const getWordData = async (searchWord) => {
     if (!response.ok) {
       throw new Error(`Unable to find "${searchWord}". Please check the spelling and try again.`);
     }
-    const [entry] = await response.json();
+
+    const data = await response.json();
+    const [entry] = data;
     const meanings = entry?.meanings[0];
     const definitions = meanings?.definitions[0];
 

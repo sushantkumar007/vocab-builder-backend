@@ -2,11 +2,12 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import { env } from "../src/config/env.js";
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
