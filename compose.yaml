@@ -95,7 +95,7 @@ services:
       - backend_network
 
   libretranslate:
-    image: libretranslate/libretranslate:v1.9.6
+    image: sushantkumar007/libretranslate:v1.9.6-all-models
     ports:
       - "5000:5000"
     deploy:
