@@ -44,7 +44,7 @@ jobs:
 
             # pull compose file from the git
             git fetch origin
-            git restore --source=origin/main compose.yaml
+            git restore --source=origin/main compose.yaml Caddyfile
 
             # pull the latest image from Docker Hub
             docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
