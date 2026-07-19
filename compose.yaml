@@ -59,10 +59,9 @@ services:
         order: start-first
     ports:
       - "3000:3000"
+    env_file:
+      - ./.env
     environment:
-      - PORT_FILE=/run/secrets/port
-      - BASE_URL_FILE=/run/secrets/base-url
-      - CLIENT_URL_FILE=/run/secrets/client-url
       - DATABASE_URL_FILE=/run/secrets/database-url
       - ACCESS_TOKEN_SECRET_FILE=/run/secrets/access-token-secret
       - ACCESS_TOKEN_EXPIRATION_FILE=/run/secrets/access-token-expiration
@@ -73,12 +72,7 @@ services:
       - SMTP_USER_FILE=/run/secrets/smtp-user
       - SMTP_PASS_FILE=/run/secrets/smtp-pass
       - SMTP_FROM_FILE=/run/secrets/smtp-from
-      - DICTIONARY_API_URL_FILE=/run/secrets/dictionary-api-url
-      - TRANSLATE_API_URL_FILE=/run/secrets/translate-api-url
     secrets:
-      - port
-      - base-url
-      - client-url
       - database-url
       - access-token-secret
       - access-token-expiration
@@ -89,8 +83,6 @@ services:
       - smtp-user
       - smtp-pass
       - smtp-from
-      - dictionary-api-url
-      - translate-api-url
     networks:
       - backend_network
 
@@ -128,12 +120,6 @@ secrets:
     external: true
   postgres-password:
     external: true
-  port:
-    external: true
-  base-url:
-    external: true
-  client-url:
-    external: true
   database-url:
     external: true
   access-token-secret:
@@ -153,10 +139,6 @@ secrets:
   smtp-pass:
     external: true
   smtp-from:
-    external: true
-  dictionary-api-url:
-    external: true
-  translate-api-url:
     external: true
 volumes:
   db_data:
