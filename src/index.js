@@ -19,6 +19,7 @@ import userRouter from "./routes/user.route.js";
 import wordRouter from "./routes/word.route.js";
 import watchlistRouter from "./routes/watchlist.route.js";
 import savedWordsRouter from "./routes/saved-words.route.js";
+import categoryRouter from "./routes/category.route.js";
 
 // use routes
 app.use("/api/v1/health", healthCheckRouter);
@@ -26,6 +27,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/words", wordRouter);
 app.use("/api/v1/watchlists", watchlistRouter);
 app.use("/api/v1/saved-words", savedWordsRouter);
+app.use("/api/v1/categories", categoryRouter);
 
 // error handler middleware
 app.use(errorHandler);
