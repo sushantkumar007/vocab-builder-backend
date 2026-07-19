@@ -20,7 +20,10 @@ const getEnv = (name) => {
 export const env = {
   PORT: getEnv("PORT"),
   BASE_URL: getEnv("BASE_URL"),
-  CLIENT_URL: getEnv("CLIENT_URL"),
+  CLIENT_URL:
+    getEnv("CLIENT_URL")
+      ?.split(",")
+      .map((url) => url.trim()) ?? [],
   DATABASE_URL: getEnv("DATABASE_URL"),
   ACCESS_TOKEN_SECRET: getEnv("ACCESS_TOKEN_SECRET"),
   ACCESS_TOKEN_EXPIRATION: getEnv("ACCESS_TOKEN_EXPIRATION"),
