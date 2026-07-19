@@ -13,6 +13,13 @@ services:
         order: stop-first
       restart_policy:
         condition: any
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$$(cat /run/secrets/postgres-user)" -d "$$(cat /run/secrets/postgres-db)"
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - db_data:/var/lib/postgresql
       - type: tmpfs
@@ -30,35 +37,33 @@ services:
     networks:
       - backend_network
 
-  adminer:
-    image: adminer:5.4.2
-    deploy:
-      replicas: 1
-      update_config:
-        order: start-first
-        failure_action: rollback
-        delay: 10s
-      rollback_config:
-        parallelism: 1
-        order: start-first
-    ports:
-      - "8080:8080"
-    networks:
-      - backend_network
-
   backend-server:
     image: sushantkumar007/vocab-builder-backend:${IMAGE_TAG}
     deploy:
       replicas: 1
       update_config:
+        parallelism: 1
         order: start-first
         failure_action: rollback
         delay: 10s
       rollback_config:
         parallelism: 1
         order: start-first
-    ports:
-      - "3000:3000"
+      restart_policy:
+        condition: any
+    expose:
+      - "3000"
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost:3000/api/v1/health
+      interval: 10s
+      timeout: 5s
+      retries: 3
     env_file:
       - ./.env
     environment:
@@ -87,6 +92,44 @@ services:
       - smtp-from
       - admin-email
       - admin-password
+    networks:
+      - backend_network
+
+  caddy:
+    image: caddy:2-alpine
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: stop-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+      restart_policy:
+        condition: any
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost/health
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    configs:
+      - source: Caddyfile
+        target: /etc/caddy/Caddyfile
     networks:
       - backend_network
 
@@ -148,6 +191,13 @@ secrets:
     external: true
   admin-password:
     external: true
+
 volumes:
   db_data:
   libretranslate_models:
+  caddy_data:
+  caddy_config:
+
+configs:
+  Caddyfile:
+    file: ./Caddyfile
