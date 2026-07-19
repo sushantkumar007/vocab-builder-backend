@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --legacy-watch src/index.js",
     "start": "node src/index.js",
+    "seed": "node src/db/seed.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "format:prisma": "npx prisma format",
