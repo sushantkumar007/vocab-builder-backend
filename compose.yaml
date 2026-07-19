@@ -72,6 +72,8 @@ services:
       - SMTP_USER_FILE=/run/secrets/smtp-user
       - SMTP_PASS_FILE=/run/secrets/smtp-pass
       - SMTP_FROM_FILE=/run/secrets/smtp-from
+      - ADMIN_EMAIL_FILE=/run/secrets/admin-email
+      - ADMIN_PASSWORD_FILE=/run/secrets/admin-password
     secrets:
       - database-url
       - access-token-secret
@@ -83,6 +85,8 @@ services:
       - smtp-user
       - smtp-pass
       - smtp-from
+      - admin-email
+      - admin-password
     networks:
       - backend_network
 
@@ -139,6 +143,10 @@ secrets:
   smtp-pass:
     external: true
   smtp-from:
+    external: true
+  admin-email:
+    external: true
+  admin-password:
     external: true
 volumes:
   db_data:
