@@ -1,0 +1,48 @@
+<!-- Dependencies -->
+node_modules
+
+<!-- Git -->
+.git
+.github
+.husky
+
+<!-- IDE -->
+.vscode
+.idea
+
+<!-- Environment -->
+.env
+.env.*
+!.env.example
+
+<!-- Logs -->
+logs
+*.log
+
+<!-- OS -->
+.DS_Store
+Thumbs.db
+
+<!-- Coverage -->
+coverage
+.nyc_output
+
+<!-- Temp -->
+tmp
+temp
+
+<!-- Docker Compose -->
+docker-compose.yml
+compose.yaml
+
+<!-- Documentation -->
+README.md
+
+<!-- Tests -->
+test
+tests
+__tests__
+
+<!-- Cache -->
+.eslintcache
+.prettiercache
