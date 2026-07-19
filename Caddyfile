@@ -1,0 +1,11 @@
+{
+  email sushantkumar@gmail.com
+}
+
+http://localhost {
+  respond /health 200
+}
+
+api.vocbank.com {
+  reverse_proxy backend-server:3000
+}
