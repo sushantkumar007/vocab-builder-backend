@@ -119,6 +119,48 @@ services:
       retries: 5
       start_period: 60s
 
+  caddy:
+    image: caddy:2-alpine
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: stop-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+      restart_policy:
+        condition: any
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost/health
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    configs:
+      - source: Caddyfile
+        target: /etc/caddy/Caddyfile
+    networks:
+      - backend_network
+
+configs:
+  Caddyfile:
+    file: ./Caddyfile
+
 networks:
   backend_network:
 
