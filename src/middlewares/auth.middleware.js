@@ -56,10 +56,10 @@ export const isAuthenticated = async (req, res, next) => {
       });
 
       const cookieOptions = {
-        // httpOnly: true,
+        httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        // secure: process.env.NODE_ENV === "production",
-        // sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       };
 
       res.cookie("accessToken", newAccessToken, cookieOptions);
