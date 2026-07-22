@@ -199,3 +199,5 @@ secrets:
 volumes:
   db_data:
   libretranslate_models:
+  caddy_data:
+  caddy_config:
