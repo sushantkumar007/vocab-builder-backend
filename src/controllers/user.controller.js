@@ -165,10 +165,10 @@ export const login = asyncHandler(async (req, res) => {
   });
 
   const cookieOptions = {
-    // httpOnly: true,
+    httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // secure: process.env.NODE_ENV === "production",
-    // sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
   };
   res.cookie("accessToken", accessToken, cookieOptions);
   res.cookie("refreshToken", refreshToken, cookieOptions);
