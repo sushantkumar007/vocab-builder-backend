@@ -226,7 +226,7 @@ export const resendVerificationEmail = asyncHandler(async (req, res) => {
 
   const emailVerificationToken = Crypto.randomBytes(32).toString("hex");
   const emailVerificationExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const emailVerificationLink = `${env.CLIENT_URL}/verify-email/${emailVerificationToken}`;
+  const emailVerificationLink = `${env.EMAIL_VERIFICATION_URL}/${emailVerificationToken}`;
 
   const { emailText, emailHtml } = emailVerificationTemplate(user.name, emailVerificationLink);
 
