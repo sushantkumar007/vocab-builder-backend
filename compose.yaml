@@ -72,6 +72,8 @@ services:
       - ACCESS_TOKEN_EXPIRATION_FILE=/run/secrets/access-token-expiration
       - REFRESH_TOKEN_SECRET_FILE=/run/secrets/refresh-token-secret
       - REFRESH_TOKEN_EXPIRATION_FILE=/run/secrets/refresh-token-expiration
+      - RESEND_API_KEY_FILE=/run/secrets/resend-api-key
+      - RESEND_FROM_FILE=/run/secrets/resend-from
       - SMTP_HOST_FILE=/run/secrets/smtp-host
       - SMTP_PORT_FILE=/run/secrets/smtp-port
       - SMTP_USER_FILE=/run/secrets/smtp-user

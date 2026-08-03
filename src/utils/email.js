@@ -1,32 +1,34 @@
-import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
+import { Resend } from "resend";
 import { env } from "../config/env.js";
 
-const transporter = nodemailer.createTransport({
-  host: env.SMTP_HOST,
-  port: env.SMTP_PORT,
-  secure: false,
-  auth: {
-    user: env.SMTP_USER,
-    pass: env.SMTP_PASS,
-  },
-});
-
 const sendEmail = async ({ email, subject, text, html }) => {
-  await transporter.sendMail({
-    from: env.SMTP_FROM,
-    to: email,
-    subject,
-    text,
-    html,
-  });
+  const resend = new Resend(env.RESEND_API_KEY);
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: env.RESEND_FROM,
+      to: email,
+      subject,
+      text,
+      html,
+    });
+
+    if (error) {
+      throw new Error(`Failed to send email: ${error.message}`, { cause: error });
+    }
+
+    return data;
+  } catch (error) {
+    throw new Error(`Failed to send email: ${error.message}`, { cause: error });
+  }
 };
 
 const mailGenerator = new Mailgen({
   theme: "default",
   product: {
-    name: "Vocab Builder",
-    link: env.CLIENT_URL,
+    name: "vocbank.com",
+    link: "https://vocbank.com",
   },
 });
 
@@ -34,7 +36,7 @@ const emailVerificationTemplate = (name, verificationLink) => {
   const email = {
     body: {
       name,
-      intro: "Welcome to Vocab Builder! We're excited to have you on board.",
+      intro: "Welcome to vocbank.com! We're excited to have you on board.",
       action: {
         instructions:
           "To get started, please verify your email address by clicking the button below:",

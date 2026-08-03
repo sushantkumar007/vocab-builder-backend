@@ -24,6 +24,9 @@ export const env = {
     getEnv("CLIENT_URL")
       ?.split(",")
       .map((url) => url.trim()) ?? [],
+  EMAIL_VERIFICATION_URL: getEnv("EMAIL_VERIFICATION_URL"),
+  RESEND_API_KEY: getEnv("RESEND_API_KEY"),
+  RESEND_FROM: getEnv("RESEND_FROM"),
   DATABASE_URL: getEnv("DATABASE_URL"),
   ACCESS_TOKEN_SECRET: getEnv("ACCESS_TOKEN_SECRET"),
   ACCESS_TOKEN_EXPIRATION: getEnv("ACCESS_TOKEN_EXPIRATION"),
