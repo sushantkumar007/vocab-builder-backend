@@ -87,6 +87,8 @@ services:
       - access-token-expiration
       - refresh-token-secret
       - refresh-token-expiration
+      - resend-api-key
+      - resend-from
       - smtp-host
       - smtp-port
       - smtp-user
@@ -182,6 +184,10 @@ secrets:
   refresh-token-secret:
     external: true
   refresh-token-expiration:
+    external: true
+  resend-api-key:
+    external: true
+  resend-from:
     external: true
   smtp-host:
     external: true
