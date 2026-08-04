@@ -27,7 +27,7 @@ const sendEmail = async ({ email, subject, text, html }) => {
 const mailGenerator = new Mailgen({
   theme: "default",
   product: {
-    name: "vocbank.com",
+    name: "vocbank",
     link: "https://vocbank.com",
   },
 });

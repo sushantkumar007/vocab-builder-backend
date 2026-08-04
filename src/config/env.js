@@ -20,11 +20,11 @@ const getEnv = (name) => {
 export const env = {
   PORT: getEnv("PORT"),
   BASE_URL: getEnv("BASE_URL"),
+  FRONTEND_URL: getEnv("FRONTEND_URL"),
   CLIENT_URL:
     getEnv("CLIENT_URL")
       ?.split(",")
       .map((url) => url.trim()) ?? [],
-  EMAIL_VERIFICATION_URL: getEnv("EMAIL_VERIFICATION_URL"),
   RESEND_API_KEY: getEnv("RESEND_API_KEY"),
   RESEND_FROM: getEnv("RESEND_FROM"),
   DATABASE_URL: getEnv("DATABASE_URL"),
