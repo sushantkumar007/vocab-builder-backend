@@ -76,7 +76,7 @@ export const register = asyncHandler(async (req, res) => {
 
   const emailVerificationToken = Crypto.randomBytes(32).toString("hex");
   const emailVerificationExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const emailVerificationLink = `${env.EMAIL_VERIFICATION_URL}/${emailVerificationToken}`;
+  const emailVerificationLink = `${env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
 
   await prisma.user.update({
     where: { id: user.id },
@@ -226,7 +226,7 @@ export const resendVerificationEmail = asyncHandler(async (req, res) => {
 
   const emailVerificationToken = Crypto.randomBytes(32).toString("hex");
   const emailVerificationExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const emailVerificationLink = `${env.EMAIL_VERIFICATION_URL}/${emailVerificationToken}`;
+  const emailVerificationLink = `${env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
 
   const { emailText, emailHtml } = emailVerificationTemplate(user.name, emailVerificationLink);
 
@@ -261,7 +261,7 @@ export const resetPasswordRequest = asyncHandler(async (req, res) => {
 
   const resetPasswordToken = Crypto.randomBytes(32).toString("hex");
   const resetPasswordExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  const resetPasswordLink = `${env.CLIENT_URL}/reset-password/${resetPasswordToken}`;
+  const resetPasswordLink = `${env.FRONTEND_URL}/reset-password/${resetPasswordToken}`;
 
   await prisma.user.update({
     where: { id: user.id },
